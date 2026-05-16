@@ -1,0 +1,11 @@
+venv 
+chroma_db 
+__pycache__ 
+*.pyc 
+.env 
+build 
+dist 
+GeneratorKP.spec 
+GeneratorKP.exe 
+.gitignoregit 
+users.json 
