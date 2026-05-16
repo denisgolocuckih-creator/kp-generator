@@ -1,0 +1,11 @@
+streamlit 
+langchain 
+langchain-openai 
+langchain-community 
+python-dotenv 
+openai 
+python-docx 
+streamlit-mic-recorder 
+openpyxl 
+pandas 
+plotly 
