@@ -835,7 +835,10 @@ with tab_main:
                     dc1, dc2, dc3, dc4 = st.columns(4)
                     dc1.download_button("📥 JSON", json.dumps(data, ensure_ascii=False, indent=2), f"KP_{datetime.now().strftime('%H%M')}.json", use_container_width=True)
                     dc2.download_button("📄 Word", generate_word(data), f"KP_{datetime.now().strftime('%H%M')}.docx", use_container_width=True)
-                    dc3.download_button("📕 PDF", generate_pdf(data), f"KP_{datetime.now().strftime('%H%M')}.pdf", "application/pdf", use_container_width=True)
+                    try:
+                        dc3.download_button("📕 PDF", generate_pdf(data), f"KP_{datetime.now().strftime('%H%M')}.pdf", "application/pdf", use_container_width=True)
+                    except:
+                        dc3.download_button("📕 PDF (нет)", data="PDF недоступен в облаке", file_name="no.pdf", use_container_width=True)
                     dc4.download_button("📋 XML (1С)", generate_xml(data), f"KP_{datetime.now().strftime('%H%M')}.xml", "application/xml", use_container_width=True)
                     
                     dc4_col, dc5_col = st.columns(2)
