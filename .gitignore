@@ -9,3 +9,11 @@ GeneratorKP.spec
 GeneratorKP.exe 
 .gitignoregit 
 users.json 
+secret.py 
+secret.py 
+secret.py 
+.env 
+data/license.key 
+data/.demo_used 
+data/history.json 
+data/leads.txt 
