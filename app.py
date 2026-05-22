@@ -121,8 +121,10 @@ DEMO_FLAG_FILE = "data/.demo_used"
 try:
     from secret import SECRET_SALT, ENCRYPTION_KEY
 except ImportError:
-    st.error("🔒 Ошибка: файл лицензии повреждён. Обратитесь к разработчику.")
-    st.stop()
+    # Для облачной версии используем значения из secrets
+    import os
+    SECRET_SALT = os.getenv("SECRET_SALT", "CloudDefaultSalt2026!")
+    ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY", "CloudEncryptionKey!")
 
 # Инициализация шифрования
 CIPHER = Fernet(b64.urlsafe_b64encode(hashlib.sha256(ENCRYPTION_KEY.encode()).digest()))
