@@ -296,7 +296,7 @@ def get_llm():
     return ChatOpenAI(
         model="deepseek/deepseek-chat",
         temperature=0.1,
-        openai_api_key=os.getenv("VSEGPT_API_KEY"),
+        openai_api_key=st.session_state.get("user_api_key") or os.getenv("VSEGPT_API_KEY"),
         openai_api_base="https://api.vsegpt.ru/v1"
     )
 
@@ -620,6 +620,20 @@ with st.sidebar:
     
     st.divider()
     
+    st.divider()
+    st.markdown("### ⚙️ Настройки API")
+    with st.expander("🔑 Ключ VseGPT"):
+        user_api_key = st.text_input(
+            "Ваш API-ключ:", 
+            type="password", 
+            value=st.session_state.get("user_api_key", ""),
+            help="Получите ключ на vsegpt.ru"
+        )
+        if st.button("💾 Сохранить ключ"):
+            st.session_state["user_api_key"] = user_api_key
+            st.success("Ключ сохранен!")
+    
+    st.divider()
     st.markdown("### ⚙️ Настройки компании")
     if "company_name" not in st.session_state:
         st.session_state.company_name = "Моя компания"
@@ -714,7 +728,7 @@ with st.sidebar:
                         s, e = resp.find('{'), resp.rfind('}') + 1
                         if s != -1 and e > s:
                             data = json.loads(resp[s:e])
-                            data["_время"] = datetime.now().strftime(" %Y.%m.%dH:%M")
+                            data["_время"] = datetime.now().strftime("%Y.%m.%d %H:%M")
                             data["_статус"] = "Черновик"
                             data["_user"] = st.session_state.username
                             add_to_history(data)
@@ -749,7 +763,7 @@ with tab_main:
                 f.write(audio["bytes"])
                 temp_path = f.name
             load_dotenv()
-            client = OpenAI(api_key=os.getenv("VSEGPT_API_KEY"), base_url="https://api.vsegpt.ru/v1")
+            client = OpenAI(api_key=st.session_state.get("user_api_key") or os.getenv("VSEGPT_API_KEY"), base_url="https://api.vsegpt.ru/v1")
             with open(temp_path, "rb") as af:
                 transcript = client.audio.transcriptions.create(model="stt-openai/whisper-1", file=af, language="ru")
             os.remove(temp_path)
@@ -1043,7 +1057,7 @@ with tab_chat:
 ВОПРОС: {chat_input}
 """
                     load_dotenv()
-                    chat_llm = ChatOpenAI(model="deepseek/deepseek-chat", temperature=0.3, openai_api_key=os.getenv("VSEGPT_API_KEY"), openai_api_base="https://api.vsegpt.ru/v1")
+                    chat_llm = ChatOpenAI(model="deepseek/deepseek-chat", temperature=0.3, openai_api_key=st.session_state.get("user_api_key") or os.getenv("VSEGPT_API_KEY"), openai_api_base="https://api.vsegpt.ru/v1")
                     answer = chat_llm.invoke(chat_prompt).content
                     st.session_state.chat_history.append({"user": chat_input, "bot": answer})
                     st.rerun()
